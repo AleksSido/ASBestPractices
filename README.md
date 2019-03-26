@@ -37,6 +37,8 @@ There will be testing notes.
 
 1. Use plop library to generate React dumb components. It can generate folder with component, style and test files. Run command `npm run plop` and type data (part of folder path, name of component) on requested input. Templates for generating are in `/plop-templates`, generation settings are in `plopfile.js`.
 
+2. Handle waiting for load image on hover problem with special component `HoveredIcon`. It renders two icons (main and hover) absolute positioning with hover icon above the main icon. Hover icon gets null opacity and appears visible on hover. So, both images are loaded and there is no flush at icon hover.
+
 
 
 
