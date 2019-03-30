@@ -39,6 +39,11 @@ There will be testing notes.
 
 2. Handle waiting for load image on hover problem with special component `HoveredIcon`. It renders two icons (main and hover) absolute positioning with hover icon above the main icon. Hover icon gets null opacity and appears visible on hover. So, both images are loaded and there is no flush at icon hover.
 
+3. Naming convention for Redux actions (source - [https://medium.com/@kylpo/redux-best-practices-eef55a20cc72]):
+  action name: <NOUN>_<VERB>
+  action creator name: <verb><Noun>
+  selector name: get<Noun>
+
 
 
 
