@@ -47,69 +47,51 @@ selector name: get + Noun
   
 4. Request of data required to render some UI components has to be combined with special service component RenderOnReady, that can shows waiting status of request (e.g., spinner). RenderOnReady can wrap components required data from server and shows them only after required data will be received from server. Also RenderOnReady can contain component to handle possible errors on response.
 ```
-class Contract extends React.Component <Props, State> {
+class SampleComponent extends React.Component {
   constructor(props: Props) {
     super(props);
     this.state = {
       isReadyToRender: false,
-      errorObject: null
+      errorObject: null,
+      isHideComponentTillGetData: true
     };
   }
-  setContractMainData = (contractMainData) => {
-    this.props.onGetContractMainData(contractMainData);
-    this.setState({isReadyToRender: true});
-  };
   componentDidMount(){
-    const contractId = +this.props.match.params.id;
-    const contractMainData = this.props.contracts.find(item => item.id === contractId);
-    if (contractMainData) {
-      //TODO: is weak place, params as nested objects can be connected searchData.contracts. Util fn cloneObject may be applied
-      this.setContractMainData(contractMainData);
-    } else {
-      api.getContractById(contractId)
-        .then(response => {
-          this.setContractMainData(response.data);
-        })
-        .catch(error => {
+    api.getSomeData()
+      .then(response => {
+        this.props.setSomeDataToStore(response.data);
+        this.setState({isReadyToRender: true});
+      })
+      .catch(error => {
           this.setState({
             isReadyToRender: true,
             errorObject: apiErrorHandler(error)
           });
-        });
+        });    
     }
   }
   render(){
-    const title = this.props.contractId ? concatIdName(this.props.contractId, this.props.name) : "";
     return (
-      <RenderOnReady isReadyToRender={this.state.isReadyToRender} errorObject={this.state.errorObject}>
-        <div className="Contract">
-          <FixedHeader>
-            <HeaderContent
-              titleId={contractViewPageIds.headingContractTitle}
-              title={title}
-              info={this.props.contractNo}/>
-          </FixedHeader>
-        </div>
-      </RenderOnReady>
+    this.state.isHideComponentTillGetData ? 
+      (<RenderOnReady isReadyToRender={this.state.isReadyToRender} errorObject={this.state.errorObject}>
+        <SomeComponent/>
+      </RenderOnReady>)
+      :
+      (<>
+        <RenderOnReady isReadyToRender={this.state.isReadyToRender} errorObject={this.state.errorObject}/>
+        <SomeComponent/>
+      </>)
     );
   }
 }
-const mapStateToProps = state => {
-  return {
-    contracts: state.organization.searchData.contracts,
-    contractId: state.organization.item.contractMainData.id,
-    name: state.organization.item.contractMainData.name,
-    contractNo: state.organization.item.contractMainData.contractNo
-  };
-};
 const mapDispatchToProps = dispatch => {
   return {
-    onGetContractMainData: (contractMainData) => dispatch({
-      type: contractMainDataActions.CONTRACT_MAIN_DATA_SET,
-      value: contractMainData})
+    setSomeDataToStore: (someData) => dispatch({
+      type: actions.SOME_DATA_SET,
+      value: someData})
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Contract);
+export default connect(null, mapDispatchToProps)(SampleComponent);
 ```
 
 
