@@ -40,6 +40,7 @@ There will be testing notes.
 2. Handle waiting for load image on hover problem with special component `HoveredIcon`. It renders two icons (main and hover) absolute positioning with hover icon above the main icon. Hover icon gets null opacity and appears visible on hover. So, both images are loaded and there is no flush at icon hover.
 
 3. Naming convention for Redux actions (source - (https://medium.com/@kylpo/redux-best-practices-eef55a20cc72)):
+
 action name: NOUN_VERB
 action creator name: verb + Noun
 selector name: get + Noun
@@ -47,6 +48,21 @@ selector name: get + Noun
   
 4. Request of data required to render some UI components has to be combined with special service component RenderOnReady, that can shows waiting status of request (e.g., spinner). RenderOnReady can wrap components required data from server and shows them only after required data will be received from server. Also RenderOnReady can contain component to handle possible errors on response.
 ```
+const RenderOnReady = (props: Props) => {
+  return (
+    <>
+      {props.errorObject ? (
+          <ErrorModal errorObject={props.errorObject}/>
+        )
+        : (props.isReadyToRender || props.spinnerIsHidden) ? (
+            props.children
+          ) : (
+           <Spinner/>
+        )}
+    </>
+  );
+};
+
 class SampleComponent extends React.Component {
   constructor(props: Props) {
     super(props);
