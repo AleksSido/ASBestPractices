@@ -107,5 +107,11 @@ const mapDispatchToProps = dispatch => {
 export default connect(null, mapDispatchToProps)(SampleComponent);
 ```
 
+5. Apply wherever it possible principle 'the server is single source of trust'. If some data were updated by user input, they have to be fetched from server.
+
+6. Do not rerender all layout for each route. Rerender only that part, which needed to change.
+
+
+
 
 
